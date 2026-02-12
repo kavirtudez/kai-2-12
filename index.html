@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Mobile optimizations for iPhone 13 Pro Max -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>For Kai 🌸</title>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+    :root {
+      --primary: #ffd43b;
+      --primary-hover: #ffc000;
+      --bg-top: #fffdf5;
+      --bg-bottom: #ffeaa7;
+      --text-main: #6b5518;
+      --text-bold: #8e6d10;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent; /* Removes default iOS tap highlight */
+      user-select: none; /* Prevents accidental text selection while tapping */
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+      color: var(--text-main);
+      text-align: center;
+      overflow: hidden;
+      height: 100dvh; /* Uses dynamic viewport height for perfect mobile fit */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Floating background particles */
+    #particles {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      bottom: -20px;
+      font-size: 14px;
+      opacity: 0;
+      animation: floatUp linear forwards;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(-100dvh) rotate(360deg); opacity: 0; }
+    }
+
+    #container {
+      position: relative;
+      z-index: 1;
+      padding: env(safe-area-inset-top) 24px env(safe-area-inset-bottom);
+      width: 100%;
+      max-width: 450px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #orchid {
+      width: 200px; /* Sized perfectly for Pro Max screens */
+      height: auto;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 15px 15px rgba(220, 180, 50, 0.3));
+      animation: gentleFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes gentleFloat {
+      0% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-15px) scale(1.02); }
+      100% { transform: translateY(0px) scale(1); }
+    }
+    
+    @keyframes scaleUp {
+      from { transform: scale(1); }
+      to { transform: scale(1.5); }
+    }
+
+    #text-container {
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    #text {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.4;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .fade-out {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #choices {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 220px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 18px 20px;
+      font-size: 20px;
+      font-weight: 800;
+      font-family: inherit;
+      color: var(--text-main);
+      border: 3px solid rgba(255, 255, 255, 0.5);
+      border-radius: 20px;
+      background: var(--primary);
+      box-shadow: 0 8px 20px rgba(255, 190, 0, 0.25), inset 0 2px 0 rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0;
+      transform: scale(0.9);
+      animation: popIn 0.5s forwards;
+    }
+
+    @keyframes popIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .btn:active {
+      transform: scale(0.95) !important;
+      background: var(--primary-hover);
+      box-shadow: 0 4px 10px rgba(255, 190, 0, 0.2);
+    }
+
+    .final-text {
+      font-size: 22px !important;
+      line-height: 1.5 !important;
+    }
+    
+    .final-text b {
+      color: var(--text-bold);
+      font-size: 26px;
+      display: block;
+      margin: 15px 0;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Background decorative particles -->
+  <div id="particles"></div>
+
+  <div id="container">
+    <img src="floating_orchid.png" id="orchid" alt="Yellow Orchid">
+    
+    <div id="text-container">
+      <div id="text" class="fade-in">Hi Kai 🌼 Ready for a tiny orchid quiz?</div>
+    </div>
+    
+    <div id="choices"></div>
+  </div>
+
+  <script>
+    // Elements
+    const textEl = document.getElementById("text");
+    const choicesDiv = document.getElementById("choices");
+    let isTransitioning = false;
+
+    // Background Particle System (Cute yellow/white floating hearts/dots)
+    function createParticles() {
+      const particleContainer = document.getElementById('particles');
+      const symbols = ['🌸', '✨', '💛', '🤍', '🌼'];
+      
+      setInterval(() => {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.animationDuration = (Math.random() * 4 + 4) + 's'; // 4-8 seconds
+        p.style.fontSize = (Math.random() * 10 + 10) + 'px'; // 10-20px
+        particleContainer.appendChild(p);
+        
+        setTimeout(() => p.remove(), 8000);
+      }, 800);
+    }
+
+    // Helper to smoothly update text
+    function updateText(newText, isFinal = false) {
+      isTransitioning = true;
+      textEl.classList.remove("fade-in");
+      textEl.classList.add("fade-out");
+      
+      setTimeout(() => {
+        if(isFinal) textEl.classList.add("final-text");
+        textEl.innerHTML = newText;
+        textEl.classList.remove("fade-out");
+        textEl.classList.add("fade-in");
+        isTransitioning = false;
+      }, 400); // Wait for fade out
+    }
+
+    // Helper to render buttons with a staggered cute animation
+    function setChoices(options) {
+      choicesDiv.innerHTML = "";
+      options.forEach((opt, index) => {
+        let btn = document.createElement("button");
+        btn.className = "btn";
+        btn.innerText = opt.text;
+        // Stagger the pop-in animation
+        btn.style.animationDelay = `${index * 0.15}s`;
+        
+        btn.onclick = () => {
+          if (isTransitioning) return; // Prevent double-clicking
+          opt.action();
+        };
+        choicesDiv.appendChild(btn);
+      });
+    }
+
+    // Quiz Logic Flow
+    function startQuiz() {
+      updateText("How long can orchids live?");
+      
+      setChoices([
+        {text: "A week", action: () => wrong("Too short. Orchids are more patient than that.")},
+        {text: "A month", action: () => wrong("Closer… but orchids like to stay longer.")},
+        {text: "Years", action: q2}
+      ]);
+    }
+
+    function wrong(msg) {
+      updateText(msg);
+      // Automatically revert back to the question after a few seconds
+      setTimeout(() => {
+        if (textEl.innerHTML === msg) {
+          updateText("How long can orchids live?");
+        }
+      }, 2500);
+    }
+
+    function q2() {
+      updateText("What do orchids need?");
+      
+      setChoices([
+        {text: "Care", action: ending},
+        {text: "Attention", action: ending},
+        {text: "Patience", action: ending}
+      ]);
+    }
+
+    function ending() {
+      choicesDiv.innerHTML = ""; // Clear buttons
+      
+      const sentences = [
+        "Good thing we have all of that.",
+        "<b>Orchids last.</b>",
+        "<b>I was hoping we would too.</b>",
+        "Happy Valentine's Day, Kai 🌸",
+        "<span style='font-size: 18px; opacity: 0.8;'>I hope I get to ask you to be my Valentine every year.</span>"
+      ];
+      
+      let currentSentence = 0;
+      
+      function showNextSentence() {
+        if (currentSentence < sentences.length - 1) {
+          // Show sentence, then fade out after 3 seconds
+          updateText(sentences[currentSentence], true);
+          currentSentence++;
+          setTimeout(showNextSentence, 3000);
+        } else {
+          // Final sentence stays
+          updateText(sentences[currentSentence], true);
+          // Show orchid and "for you" after 2 seconds
+          setTimeout(showFinalOrchid, 2000);
+        }
+      }
+      
+      showNextSentence();
+    }
+    
+    function showFinalOrchid() {
+      textEl.classList.remove("fade-in");
+      textEl.classList.add("fade-out");
+      
+      setTimeout(() => {
+        textEl.innerHTML = "";
+        const orchid = document.getElementById("orchid");
+        orchid.src = "orchid.png";
+        orchid.style.width = "120px";
+        orchid.style.animation = "gentleFloat 4s ease-in-out infinite, scaleUp 1s ease forwards";
+        
+        // Add "for you" text below orchid
+        setTimeout(() => {
+          const forYou = document.createElement("div");
+          forYou.style.fontSize = "32px";
+          forYou.style.fontWeight = "700";
+          forYou.style.marginTop = "20px";
+          forYou.style.color = "var(--text-bold)";
+          forYou.style.opacity = "0";
+          forYou.style.transition = "opacity 1s ease";
+          forYou.innerText = "i love you";
+          document.getElementById("container").appendChild(forYou);
+          
+          setTimeout(() => {
+            forYou.style.opacity = "1";
+          }, 100);
+        }, 500);
+      }, 400);
+    }
+
+    // Initialize
+    createParticles();
+    
+    // Start the app after a 2.5 second delay so she can read the intro
+    setTimeout(startQuiz, 2500);
+
+  </script>
+</body>
+</html>
